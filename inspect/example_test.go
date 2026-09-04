@@ -3,7 +3,7 @@ package inspect_test
 import (
 	"fmt"
 
-	merkletrie "github.com/TheFellow/go-merkletrie"
+	"github.com/TheFellow/go-merkletrie"
 	"github.com/TheFellow/go-merkletrie/inspect"
 )
 

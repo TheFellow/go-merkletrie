@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"reflect"
 
-	merkletrie "github.com/TheFellow/go-merkletrie"
+	"github.com/TheFellow/go-merkletrie"
 )
 
 // ErrInvalidArgument indicates that Walk or Describe received an unusable
