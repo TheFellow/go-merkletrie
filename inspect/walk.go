@@ -1,4 +1,4 @@
-package debug
+package inspect
 
 import (
 	"bytes"
@@ -10,9 +10,9 @@ import (
 	merkletrie "github.com/TheFellow/go-merkletrie"
 )
 
-// ErrInvalidArgument indicates that Walk or Inspect received an unusable
+// ErrInvalidArgument indicates that Walk or Describe received an unusable
 // codec, tree, or visitor.
-var ErrInvalidArgument = errors.New("merkletrie/debug: invalid argument")
+var ErrInvalidArgument = errors.New("merkletrie/inspect: invalid argument")
 
 // Summary is the human-readable form of a subtree's semantic root.
 type Summary struct {
@@ -114,7 +114,7 @@ func Walk[K, V any](tree merkletrie.Tree[K, V], codec merkletrie.Codec[K, V], vi
 	visit = func(reference merkletrie.Reference, slots []uint8) error {
 		document, ok := documents[reference.ID]
 		if !ok {
-			return fmt.Errorf("merkletrie/debug: object %x is missing", reference.ID)
+			return fmt.Errorf("merkletrie/inspect: object %x is missing", reference.ID)
 		}
 		node := Node[K, V]{
 			Route:       route(slots),
@@ -127,11 +127,11 @@ func Walk[K, V any](tree merkletrie.Tree[K, V], codec merkletrie.Codec[K, V], vi
 			for _, encoded := range document.Entries {
 				key, err := codec.DecodeKey(bytes.Clone(encoded.Key))
 				if err != nil {
-					return fmt.Errorf("merkletrie/debug: decode key in %s: %w", node.Route, err)
+					return fmt.Errorf("merkletrie/inspect: decode key in %s: %w", node.Route, err)
 				}
 				value, err := codec.DecodeValue(bytes.Clone(encoded.Value))
 				if err != nil {
-					return fmt.Errorf("merkletrie/debug: decode value in %s: %w", node.Route, err)
+					return fmt.Errorf("merkletrie/inspect: decode value in %s: %w", node.Route, err)
 				}
 				node.Entries = append(node.Entries, Entry[K, V]{
 					Key: key, Value: value,
@@ -161,8 +161,8 @@ func Walk[K, V any](tree merkletrie.Tree[K, V], codec merkletrie.Codec[K, V], vi
 	return visit(root, nil)
 }
 
-// Inspect collects the same human-readable nodes produced by Walk.
-func Inspect[K, V any](tree merkletrie.Tree[K, V], codec merkletrie.Codec[K, V]) (Description[K, V], error) {
+// Describe collects the same human-readable nodes produced by Walk.
+func Describe[K, V any](tree merkletrie.Tree[K, V], codec merkletrie.Codec[K, V]) (Description[K, V], error) {
 	description := Description[K, V]{
 		ProtocolVersion: merkletrie.ProtocolVersion,
 		CompatibilityID: digest(tree.CompatibilityID()),

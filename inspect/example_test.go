@@ -1,18 +1,18 @@
-package debug_test
+package inspect_test
 
 import (
 	"fmt"
 
 	merkletrie "github.com/TheFellow/go-merkletrie"
-	triedebug "github.com/TheFellow/go-merkletrie/debug"
+	"github.com/TheFellow/go-merkletrie/inspect"
 )
 
-func ExampleInspect() {
+func ExampleDescribe() {
 	codec, _ := merkletrie.NewCodec(merkletrie.StringEncoding(), merkletrie.Uint64Encoding())
 	tree, _ := merkletrie.New(codec)
 	tree, _, _ = tree.Put("answer", 42)
 
-	description, _ := triedebug.Inspect(tree, codec)
+	description, _ := inspect.Describe(tree, codec)
 	for _, node := range description.Nodes {
 		fmt.Printf("%s: %s (%d entries)\n",
 			node.Route, node.Reference.Kind, node.Reference.Semantic.Count)
