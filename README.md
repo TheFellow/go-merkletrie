@@ -57,6 +57,7 @@ and fixed-width integers. Use `NewEncoding` for application types.
 ## Examples
 
 - [`examples/basic`](examples/basic) — immutable updates and historical versions
+- [`examples/content-addressed-files`](examples/content-addressed-files) — versioned file paths over deduplicated blobs
 - [`examples/custom-codec`](examples/custom-codec) — a canonical struct encoding
 - [`examples/lazy-storage`](examples/lazy-storage) — lazy reads and safe persistence
 
@@ -64,6 +65,7 @@ Run them from the repository root:
 
 ```sh
 go run ./examples/basic
+go run ./examples/content-addressed-files
 go run ./examples/custom-codec
 go run ./examples/lazy-storage
 ```
