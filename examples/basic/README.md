@@ -4,5 +4,5 @@ This example keeps multiple versions of a trie alive at once and demonstrates
 that an update changes only the returned value.
 
 ```sh
-go run ./cmd/basic
+go run ./examples/basic
 ```
