@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"testing"
 
-	merkletrie "github.com/TheFellow/go-merkletrie"
+	"github.com/TheFellow/go-merkletrie"
 	"github.com/TheFellow/go-merkletrie/inspect"
 )
 
