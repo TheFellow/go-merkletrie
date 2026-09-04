@@ -1,4 +1,4 @@
-package debug_test
+package inspect_test
 
 import (
 	"encoding/json"
@@ -7,10 +7,10 @@ import (
 	"testing"
 
 	merkletrie "github.com/TheFellow/go-merkletrie"
-	"github.com/TheFellow/go-merkletrie/debug"
+	"github.com/TheFellow/go-merkletrie/inspect"
 )
 
-func TestInspectLeaf(t *testing.T) {
+func TestDescribeLeaf(t *testing.T) {
 	codec := stringUintCodec(t)
 	tree, err := merkletrie.New(codec)
 	if err != nil {
@@ -21,7 +21,7 @@ func TestInspectLeaf(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	description, err := debug.Inspect(tree, codec)
+	description, err := inspect.Describe(tree, codec)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -54,8 +54,8 @@ func TestWalkInternalNodesInRootFirstSlotOrder(t *testing.T) {
 		}
 	}
 
-	var nodes []debug.Node[string, uint64]
-	err = debug.Walk(tree, codec, debug.VisitorFunc[string, uint64](func(node debug.Node[string, uint64]) error {
+	var nodes []inspect.Node[string, uint64]
+	err = inspect.Walk(tree, codec, inspect.VisitorFunc[string, uint64](func(node inspect.Node[string, uint64]) error {
 		nodes = append(nodes, node)
 		return nil
 	}))
@@ -76,7 +76,7 @@ func TestWalkInternalNodesInRootFirstSlotOrder(t *testing.T) {
 
 	stop := errors.New("stop")
 	calls := 0
-	err = debug.Walk(tree, codec, debug.VisitorFunc[string, uint64](func(debug.Node[string, uint64]) error {
+	err = inspect.Walk(tree, codec, inspect.VisitorFunc[string, uint64](func(inspect.Node[string, uint64]) error {
 		calls++
 		return stop
 	}))
@@ -91,7 +91,7 @@ func TestWalkEmptyTree(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	description, err := debug.Inspect(tree, codec)
+	description, err := inspect.Describe(tree, codec)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -110,18 +110,18 @@ func TestWalkRejectsInvalidArguments(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	visitor := debug.VisitorFunc[string, uint64](func(debug.Node[string, uint64]) error { return nil })
-	if err := debug.Walk(tree, nil, visitor); !errors.Is(err, debug.ErrInvalidArgument) {
+	visitor := inspect.VisitorFunc[string, uint64](func(inspect.Node[string, uint64]) error { return nil })
+	if err := inspect.Walk(tree, nil, visitor); !errors.Is(err, inspect.ErrInvalidArgument) {
 		t.Fatalf("nil codec error = %v", err)
 	}
-	if err := debug.Walk(tree, codec, nil); !errors.Is(err, debug.ErrInvalidArgument) {
+	if err := inspect.Walk(tree, codec, nil); !errors.Is(err, inspect.ErrInvalidArgument) {
 		t.Fatalf("nil visitor error = %v", err)
 	}
-	if err := debug.Walk(tree, mismatchedCodec{other}, visitor); !errors.Is(err, debug.ErrInvalidArgument) {
+	if err := inspect.Walk(tree, mismatchedCodec{other}, visitor); !errors.Is(err, inspect.ErrInvalidArgument) {
 		t.Fatalf("mismatched codec error = %v", err)
 	}
 	var zero merkletrie.Tree[string, uint64]
-	if err := debug.Walk(zero, codec, visitor); !errors.Is(err, debug.ErrInvalidArgument) {
+	if err := inspect.Walk(zero, codec, visitor); !errors.Is(err, inspect.ErrInvalidArgument) {
 		t.Fatalf("zero tree error = %v", err)
 	}
 }
