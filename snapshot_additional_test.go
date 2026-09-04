@@ -38,7 +38,7 @@ func TestSnapshotMutationsMatchTreeAndReopen(t *testing.T) {
 			t.Fatalf("root mismatch after put %d", i)
 		}
 	}
-	for i := 0; i < 20; i++ {
+	for i := range 20 {
 		key := fmt.Sprintf("key-%04d", i)
 		tree, _, err = tree.Delete(key)
 		if err != nil {

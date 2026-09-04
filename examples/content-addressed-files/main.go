@@ -94,7 +94,11 @@ func main() {
 	ctx := context.Background()
 	directory, err := os.MkdirTemp("", "go-merkletrie-files-")
 	check(err)
-	defer os.RemoveAll(directory)
+	defer func() {
+		if err := os.RemoveAll(directory); err != nil {
+			log.Printf("remove temporary directory: %v", err)
+		}
+	}()
 	store := diskStore{directory: directory}
 
 	fileEncoding, err := merkletrie.NewEncoding(

@@ -6,6 +6,7 @@ import (
 	"encoding/binary"
 	"errors"
 	"fmt"
+	"maps"
 	"math/rand/v2"
 	"slices"
 	"strconv"
@@ -355,8 +356,6 @@ func assertTree(t *testing.T, tree Tree[string, uint64], want map[string]uint64)
 
 func cloneMap[K comparable, V any](source map[K]V) map[K]V {
 	result := make(map[K]V, len(source))
-	for key, value := range source {
-		result[key] = value
-	}
+	maps.Copy(result, source)
 	return result
 }
