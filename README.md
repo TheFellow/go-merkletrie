@@ -73,6 +73,27 @@ go run ./examples/lazy-storage
 Read [Concepts and persistence](docs/concepts.md) for codecs, root semantics,
 content-addressed storage, lazy snapshots, and production considerations.
 
+## Inspecting a trie
+
+The [`debug`](debug) package walks the physical trie and decodes leaf entries
+into a human-readable description. It expands digests as hexadecimal strings
+and includes routes, child slots, semantic summaries, and encoded sizes:
+
+```go
+description, err := triedebug.Inspect(tree, codec)
+check(err)
+
+for _, node := range description.Nodes {
+	fmt.Printf("%s: %s (%d entries)\n",
+		node.Route, node.Reference.Kind, node.Reference.Semantic.Count)
+}
+```
+
+Import it as `triedebug "github.com/TheFellow/go-merkletrie/debug"`. Use
+`triedebug.Walk` with a `triedebug.Visitor` to inspect large tries without
+collecting every node. These diagnostics describe the current implementation
+and are not a persistence format.
+
 ## Development
 
 ```sh
